@@ -57,7 +57,6 @@ export const RegisterScreen = () => {
             });
             return;
         }
-        console.log(formRegister);
         try {
             const response = await createUserWithEmailAndPassword(
                 auth,

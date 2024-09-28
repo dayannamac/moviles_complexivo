@@ -13,7 +13,7 @@ interface FormLogin {
 }
 
 //interface Message
-interface Message {
+export interface Message {
     visible: boolean;
     message: string;
     color: string;
@@ -57,7 +57,6 @@ export const LoginScreen = () => {
             });
             return;
         }
-        console.log(formSignIn);
         try {
             const response = await signInWithEmailAndPassword(
                 auth,
