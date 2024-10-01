@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Button, Divider, IconButton, Modal, Portal, Text, TextInput } from 'react-native-paper'
 import { styles } from '../../../theme/styles';
 import { View } from 'react-native';
-import { updateProfile } from 'firebase/auth';
+import { updateProfile, signOut } from 'firebase/auth';
 import firebase from '@firebase/auth';
 import { auth } from '../../../config/firebaseConfig';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 //interface - Prop (Propiedades que se envian de un componente padre a un componente hijo)
 interface Props {
@@ -33,6 +34,9 @@ export const UpdateProfileComponent = ({ showModalProfile, setShowModalProfile }
         setFormUser({ name: auth.currentUser?.displayName ?? '' })
     }, []);
 
+    //hook useNavigation: permitir navegacion de un screen a otro
+    const navigation = useNavigation();
+
     //funcion: actualizar el estado del formulario
     const handleSetValues = (key: string, value: string) => {
         setFormUser({ ...formUser, [key]: value });
@@ -48,6 +52,21 @@ export const UpdateProfileComponent = ({ showModalProfile, setShowModalProfile }
         }
         //cerrar modal
         setShowModalProfile(false);
+    }
+
+    //funcion: cerrar sesión del usuario
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            //resetear las rutas
+            navigation.dispatch(CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'Login' }]
+            }));
+            setShowModalProfile(false);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
@@ -80,6 +99,15 @@ export const UpdateProfileComponent = ({ showModalProfile, setShowModalProfile }
                     onPress={handlerUpdateUser}
                     style={{ backgroundColor: '#ff913a' }}>
                     Actualizar</Button>
+                <View style={styles.iconSignOut}>
+                    <IconButton
+                        icon="logout-variant"
+                        size={30}
+                        mode='contained'
+                        style={{ backgroundColor: '#ff913a' }}
+                        onPress={handleSignOut}
+                    />
+                </View>
             </Modal>
         </Portal>
     )

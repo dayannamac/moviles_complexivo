@@ -4,7 +4,7 @@ import { styles } from '../../../theme/styles';
 import { View } from 'react-native';
 import { Message } from '../../LoginScreen';
 import { push, ref, set } from 'firebase/database';
-import { dbRealTime } from '../../../config/firebaseConfig';
+import { auth, dbRealTime } from '../../../config/firebaseConfig';
 
 //interface - Props
 interface Props {
@@ -53,7 +53,7 @@ export const NewMenuComponent = ({ showModalMenu, setShowModalMenu }: Props) => 
             });
             return;
         }
-        const dbRef = ref(dbRealTime, 'menus');
+        const dbRef = ref(dbRealTime, 'menus/'+auth.currentUser?.uid);
         const saveMenu = push(dbRef);
         try {
             await set(saveMenu, formMenu);
@@ -62,6 +62,7 @@ export const NewMenuComponent = ({ showModalMenu, setShowModalMenu }: Props) => 
                 message: 'Registro de menú exitoso',
                 color: '#acf72a'
             });
+            setShowModalMenu(false);
         } catch (e) {
             console.log(e);
             setShowMessage({

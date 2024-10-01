@@ -59,4 +59,25 @@ export const styles = StyleSheet.create({
         bottom: 0,
         backgroundColor:'#ff913a'
     },
+    rootListMenu: {
+        marginTop: 10,
+        flexDirection: 'row',
+        padding: 10,
+        alignItems: 'center',
+        gap: 20
+    },
+    rootDetail: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
+        gap: 20
+    },
+    textDetail: {
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+    iconSignOut: {
+        marginTop: 25,
+        alignItems: 'center'
+    }
 })

@@ -8,6 +8,7 @@ import { auth } from '../config/firebaseConfig';
 import { View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { styles } from '../theme/styles';
+import { DetailMenuScreen } from '../screens/HomeScreen/DetailMenuScreen';
 
 const Stack = createStackNavigator();
 
@@ -15,18 +16,17 @@ const Stack = createStackNavigator();
 interface Routes {
     name: string;
     screen: () => JSX.Element;
+    headerShow?: boolean;
+    title?: string;
 }
 
-//arreglo de usuario no logueado
-const routesNoAuth: Routes[] = [
+//arreglo - routes para navegacion
+const routes: Routes[] = [
     { name: 'Login', screen: LoginScreen },
     { name: 'Register', screen: RegisterScreen },
-]
-
-//arreglo para usuario logueado
-const routesAuth: Routes[] = [
-    { name: "Home", screen: HomeScreen }
-]
+    { name: 'Home', screen: HomeScreen },
+    { name: 'Detail', screen: DetailMenuScreen, headerShow: true, title: 'Detalle de menú' }
+];
 
 export const StackNavigator = () => {
 
@@ -56,22 +56,17 @@ export const StackNavigator = () => {
                         <ActivityIndicator animating={true} size={40} />
                     </View >
                 ) : (
-                    <Stack.Navigator>
+                    <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Login'}>
                         {
-                            !isAuth ?
-                                routesNoAuth.map((item, index) => (
-                                    <Stack.Screen key={index}
-                                        name={item.name}
-                                        options={{ headerShown: false }}
-                                        component={item.screen} />
-                                ))
-                                :
-                                routesAuth.map((item, index) => (
-                                    <Stack.Screen key={index}
-                                        name={item.name}
-                                        options={{ headerShown: false }}
-                                        component={item.screen} />
-                                ))
+                            routes.map((item, index) => (
+                                <Stack.Screen key={index}
+                                    name={item.name}
+                                    options={{
+                                        headerShown: item.headerShow ?? false,
+                                        title: item.title
+                                    }}
+                                    component={item.screen} />
+                            ))
                         }
                     </Stack.Navigator>
                 )
